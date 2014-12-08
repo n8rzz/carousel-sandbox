@@ -15,7 +15,6 @@ var NERD = NERD || {};
         APP.CarouselController.init();
     });
 
-
     /* -------------------------------------------------------------------------
     InstanceCarousel
     Author: Nate Geslin
@@ -78,18 +77,25 @@ var NERD = NERD || {};
 
         InstanceCarousel.prototype.onSlideHover = function() {
             // slide.mouseenter
-
             // slide.mouseexit
         };
 
         InstanceCarousel.prototype.onSlideThumbHover = function () {
             // slide.mouseenter
-
             // slide.mouseexit
         };
 
-        InstanceCarousel.prototype.redraw = function () {};
-        InstanceCarousel.prototype.render = function () {};
+        InstanceCarousel.prototype.render = function() {
+            //PREVIOUSLY updatePos();
+        };
+        InstanceCarousel.prototype.redraw = function() {
+            // PREVIOUSLY nextSlide();
+
+            // change current slide to next slide
+            // if ( hover ) { store previous slide index, change to hovered thumb }
+        };
+
+        return InstanceCarousel;
 
     }());
 
@@ -115,5 +121,5 @@ var NERD = NERD || {};
         }
     };
 
-}(JQuery, NERD));
+}(jQuery, NERD));
 

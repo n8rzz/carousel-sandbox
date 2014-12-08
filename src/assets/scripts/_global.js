@@ -44,7 +44,6 @@ var InstanceCarousel = function() {
     return InstanceCarousel;
 };
 
-
 /* -------------------------------------------------------------------------
 CarouselController
 Author: Nate Geslin
