@@ -1,0 +1,16 @@
+{
+  "generator-nerdery": {
+    "title": "CLIENT.Project",
+    "name": "client-project",
+    "description": "Example project for Client.",
+    "version": "1.0.0",
+    "markup": "MarkupVanilla",
+    "styles": "StylesSass",
+    "scripts": "ScriptsVanilla",
+    "scriptsVanillaNamespace": "NRD",
+    "framework": "FrameworkVanilla",
+    "frameworkVanillaFeatures": [
+      "jQuery"
+    ]
+  }
+}

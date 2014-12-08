@@ -1,0 +1,11 @@
+{
+  "name": "carousel-sandbox",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "nerdery-reset-css": "./tools/cache/nerdery-reset-css",
+    "jquery": "components/jquery#1.11.0",
+    "nerdery-function-bind": "./tools/cache/nerdery-function-bind"
+  },
+  "devDependencies": {}
+}

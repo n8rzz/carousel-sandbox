@@ -1,0 +1,89 @@
+/* === carousel.scss === */
+
+#carouselContainer {
+    height: 430px;
+    width: 666px;
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.carouselSlideContainer {
+    display: block;
+    height: 331px;
+    overflow: hidden;
+}
+.carouselSlideContainer > ul li {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.carouselSlide {
+    position: relative;
+    z-index: -900;
+}
+
+
+.carouselThumbContainer {
+    display: block;
+    padding-top: 10px;
+    overflow: hidden;
+}
+.carouselThumbContainer > ul li {
+    float: left;
+}
+.carouselThumbContainer > ul > * + * {
+    margin-left: 15px;
+}
+
+.carouselThumbItem {
+    display: block;
+    width: 149px;
+    border: 3px solid #ffffff;
+}
+
+.carouselThumbItem_isActive,
+.carouselThumbItem:hover {
+ //   background: transparent url(../media/images/thumbnail-active-arrow.png) 50% 0 no-repeat;
+    border: 3px solid #0084d9;
+}
+
+.carouselThumbItem > img {
+    width: 100%;
+    vertical-align: middle;
+    border: 0;
+}
+
+
+
+/* === NEED TO MOVE TO DIFFERENT FILE === */
+.isVisuallyHidden {
+    position: absolute !important;
+    left: -9999px !important;
+    font-size: 1px;
+}
+
+.transparent-container { //transparentContainer
+    width: 100%;
+    height: 68px;
+    padding: 10px;
+    display: block;
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    font-family: HelveticaNeueBold,HelveticaNeue-Bold,"Helvetica Neue Bold",HelveticaNeue,"Helvetica Neue",Helvetica,Tahoma,Arial,sans-serif;
+    color: #282b2e;
+    background: #e9e9e9;
+    @include opacity(0.8);
+}
+.transparent-hd { //transparentContainer-hd
+    padding-top: 5px;
+    padding-bottom: 3px;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.transparent-bd {
+    font-size: 14px;
+    line-height: 18px;
+}
