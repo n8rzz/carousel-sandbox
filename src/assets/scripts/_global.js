@@ -1,16 +1,11 @@
-/*
-init
-setupHandlers
-createChildren
-layout
-enable/disable
-destroy
-render
-redraw
-*/
+/* ---------------------------------------------------------------------
+Global JavaScript
 
+Target Browsers: All
+Author: Nate Geslin
+------------------------------------------------------------------------ */
 // Namspace object
-var NAT = NAT || {};
+var NERD = NERD || {};
 
 // Reference to JQuery and Namespace
 (function($, APP) {
@@ -102,6 +97,8 @@ var NAT = NAT || {};
     ------------------------------------------------------------------------- */
     App.CarouselController = {
         init: function() {
+        // CarouselController.prototype.init = function() {} ???
+
             var $carouselSlides = $('.carouselSlide');
             var $carouselThumbItem = $('.carouselThumbItem');
 
@@ -122,4 +119,4 @@ var NAT = NAT || {};
         }
     };
 
-}(JQuery, NAT));
+}(JQuery, NERD));

@@ -1,13 +1,9 @@
-var IS_ACTIVE = null;
-
 /* ---------------------------------------------------------------------
 Global JavaScript
 
 Target Browsers: All
 Author: Nate Geslin
 ------------------------------------------------------------------------ */
-
-
 
 /* -------------------------------------------------------------------------
 InstanceCarousel
@@ -33,8 +29,14 @@ var InstanceCarousel = function() {
 
     InstanceCarousel.prototype.setupLayout = function() {};
     InstanceCarousel.prototype.setupHandlers = function() {};
-    InstanceCarousel.prototype.render = function() {};
+    InstanceCarousel.prototype.render = function() {
+        //PREVIOUSLY updatePos();
+
+
+    };
     InstanceCarousel.prototype.redraw = function() {
+        // PREVIOUSLY nextSlide();
+
         // change current slide to next slide
         // if ( hover ) { store previous slide index, change to hovered thumb }
     };
@@ -51,6 +53,8 @@ Author: Nate Geslin
 ------------------------------------------------------------------------- */
 var CarouselController = function() {
     CarouselController.prototype.init = function() {
+
+
         //return early if there isn't a carousel slide or carousel thumbnail
 
     };
