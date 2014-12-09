@@ -4,122 +4,204 @@ Global JavaScript
 Target Browsers: All
 Author: Nate Geslin
 ------------------------------------------------------------------------ */
-// Namspace object
+
+// Namespace Object
 var NERD = NERD || {};
 
-// Reference to JQuery and Namespace
+// Pass reference to jQuery and Namespace
 (function($, APP) {
 
+    // DOM Ready Function
     $(function() {
         APP.InstanceCarousel.init();
-        APP.CarouselController.init();
+        APP.CarouselsController.init();
     });
 
-    /* -------------------------------------------------------------------------
-    InstanceCarousel
-    Author: Nate Geslin
 
-    ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------
+InstanceCarousel
+Author: Nate Geslin
+------------------------------------------------------------------------- */
     APP.InstanceCarousel = (function() {
-        // constructor
         var InstanceCarousel = function() {
             this.$carousel = null;
         };
 
-        // inatialize
-        InstanceCarousel.prototype.init = function($elem) {
-            if (!$elem) {
-                return;
-            }
-            if ($elem.length === 0) {
-                return;
-            }
-
-            //define variables
-/*
-*            var $carouselContainer = $('#carousel-container');
-*            var $carouselItem = $('.carousel-item');
-*            var $startSlide = '#carousel-item-1'; // $('#carousel-item-1')  // $carouselContainer.first();
-*            var $startSlideThumb = '#carousel-item-thumb-1'; //$carouselThumbContainer.first();
-*
-*            var previous = null;
-*            var previousThumb = null;
-*            var current = null;
-*            var currentThumb = null;
-*            var hoverSlide = null;
-*            var hoverThumb = null;
-*            var carousel = 0;
-*            var carouselTime = 5000; //magic number
-*            var currentPos = 1; //rewrite to start from 0
-*            var slideLimit = $('.carousel-item-thumb li').length;
-*
-*            var ariaHidden = 'aria-hidden';
-*            var activeThumb = 'active-thumb';
-*            var hoverDelay = 400; //magic number
+        InstanceCarousel.prototype.init = function($elementOrUndefined) {
+            /**
+            * Flag to indicate whether the module has been enabled
+            *
+            * @property isEnabled
+            * @type {Boolean}
+            * @default false
             */
+            this.isEnabled = false;
+            /**
+             * Root element of the Carousel Element
+             *
+             * @property $element
+             * @type {jQuery}
+             */
+            this.$element = $elementOrUndefined || null;
 
-            //instance varibale for carousel
-            this.$carousel = $elem;
-            // initial content styles
-            this.setupContentStyles();
-            // carousel interactions
-            this.setupHandlers();
-        };
+            /**
+            * Current slide index of carousel
+            *
+            * @property currentSlideIndex
+            * @type {Number}
+            * @default 0
+            */
+            this.currentSlideIndex = 0;
 
-        InstanceCarousel.prototype.setupContentStyles = function () {
-            //visually hide hidden slides
+            /**
+            * Total slides in Carousel
+            *
+            * @property totalSlideCount
+            * @type {Number}
+            * @default null
+            */
+            this.totalSlideCount = null;
+            /**
+            * Delay time (in miliseconds) between slide changes
+            *
+            * @property slideIntervalDelay
+            * @type {Number}
+            * @default 5000
+            */
+            this.slideIntervalDelay = 5000;
+
+            /**
+            * Delay time (in miliseconds) before carousel restarts animation
+            * after user exits carouselSlide or carouselThumbItem
+            *
+            * @property hoverDelay
+            * @type {Number}
+            * @default 400
+            */
+            this.hoverDelay = 400;
+
+            /**
+            * CSS class name for active carousel thumbnail
+            *
+            * @property activeThumbnail
+            * @type {String}
+            * @default 'carouselItemThumb_isActive'
+            */
+            this.isActiveThumb = 'carouselItemThumb_isActive';
+
+
+            /**
+            * CSS class name for visually hidden elements
+            * used to hide elements without using .hide()
+            *
+            * @property isVisuallyHidden
+            * @type {String}
+            * @default 'isVisuallyHidden'
+            */
+            this.isVisuallyHidden = 'isVisuallyHidden';
+
+            /**
+            * Aria-hidden string attribute
+            *
+            * @property ariaHidden
+            * @type {String}
+            * @default 'aria-hidden'
+            */
+            this.ariaHidden = 'aria-hidden';
+
+            /**
+             *
+             *
+             * @property
+             * @type
+             * @default
+             */
+             this.$carousel = $element;
+
+            return this.setupHandlers()
+                       .createChildren()
+                       .setupLayout()
+                       .render()
+                       .redraw();
+
         };
 
         InstanceCarousel.prototype.setupHandlers = function() {
-            //var carouselHoverHandler = $.proxy(this.onSlideHover, this);
-            //var onSlideThumbnailHover = $.proxy(this.onSlideThumbnailHover, this);
+//            this.onSlideHoverHandler = $.proxy(this.onSlideHover, this);
+//            this.onThumbnailHoverHandler = $.proxy(this.onThumbnailHover, this);
+
+            var slideHoverHandler = $.proxy(this.onSlideHover, this);
+            this.$carousel.on('mouseenter', $carouselSlides, slideHoverHandler);
+
+            var thumbnailHoverHandler = $.proxy(this.onThumbnailHover, this);
+            this.$carousel.on('mouseenter', $carouselThumbItem, thumbnailHoverHandler);
+
+            return this;
         };
 
-        InstanceCarousel.prototype.onSlideHover = function() {
-            // slide.mouseenter
-            // slide.mouseexit
+        InstanceCarousel.prototype.createChildren = function() {
+            this.$carouselSlides = this.$element.find('.js-carouselSlide');
+            this.$carouselThumbnails = this.$element.find('.js-carouselThumbItem');
+
+            return this;
         };
 
-        InstanceCarousel.prototype.onSlideThumbHover = function () {
-            // slide.mouseenter
-            // slide.mouseexit
+        InstanceCarousel.prototype.setupLayout = function() {
+            this.$carousel.forEach($carouselSlides).addClass(isVisuallyHidden);
+
         };
 
         InstanceCarousel.prototype.render = function() {
-            //PREVIOUSLY updatePos();
+            //$('.js-carouselSlide').eq(3).removeClass('isVisuallyHidden');
+            //$('.js-carouselThumbItem').eq(3).addClass('carouselThumbItem_isActive');
         };
-        InstanceCarousel.prototype.redraw = function() {
-            // PREVIOUSLY nextSlide();
 
+        InstanceCarousel.prototype.redraw = function() {
+            // $('.js-carouselSlide').eq(3).addClass('isVisuallyHidden').fadeIn();
+            // $('.js-carouselThumbItem').eq(3).removeClass('carouselThumbItem_isActive');
             // change current slide to next slide
             // if ( hover ) { store previous slide index, change to hovered thumb }
         };
 
-        return InstanceCarousel;
+        InstanceCarousel.prototype.onSlideHover = function() {
+            // slide.mouseenter
+            console.log('slide hover');
 
+            // slide.mouseexit
+        };
+
+        InstanceCarousel.prototype.onThumbnailHover = function () {
+            // slide.mouseenter
+            console.log('thumbnail hover');
+
+            // slide.mouseexit
+        };
+
+        return InstanceCarousel;
     }());
 
-    /* -------------------------------------------------------------------------
-    CarouselController
-    Author: Natw Geslin
+/* -------------------------------------------------------------------------
+CarouselsController
+Author: Nate Geslin
+------------------------------------------------------------------------- */
+    APP.CarouselsController = (function() {
+       CarouselsController.prototype.init = function() {
+            var $carousels = $('.js-carouselContainer');
 
-    ------------------------------------------------------------------------- */
-    App.CarouselController = {
-        init: function() {
-        // CarouselController.prototype.init = function() {} ???
+            if ($carousels.length === 0) {
+                return;
+            }
 
-            var $carouselSlides = $('.carouselSlide');
-            var $carouselThumbItem = $('.carouselThumbItem');
-            //return early if there isn't a carousel slide or carousel thumbnail
+//// instance.init?        var $carouselSlides = $('.js-carouselSlide');
+//// instance.init?        var $carouselThumbnails = $('.js-carouselThumbItem');
 
-            $carouselSlides.each(function() {
+            $carousels.each(function() {
                 var $this = $(this);
-                var myCarousel = new App.InstanceCarousel();
-                myCarousel.init($this);
+                var mycarousel = new APP.InstanceCarousel();
+                mycarousel.init($this);
             });
 
-        }
-    };
+        };
+    });
 
 }(jQuery, NERD));
-
