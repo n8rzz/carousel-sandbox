@@ -1,140 +1,108 @@
+// application.js
 'use strict';
 
-/* ---------------------------------------------------------------------
-Global JavaScript
+/*
+init
+setupHandlers
+createChildren
+layout
+enable/disable
+destroy
+render
+redraw
+*/
+var $carouselContainer = $('.js-carouselContainer');
+var $carouselSlides = $('.js-carouselSlide');
 
-Target Browsers: All
-Author: Nate Geslin
------------------------------------------------------------------------- */
+var $startSlide = null;
+var $startSlideThumb = null;
 
-/* -------------------------------------------------------------------------
-InstanceCarousel
-Author: Nate Geslin
-------------------------------------------------------------------------- */
-var InstanceCarousel = function($elementOrUndefined) {
-    this.init($elementOrUndefined);
-};
+var slideLimit = null;
+var carouselTimer = 0;
+var carouselDelay = 5000; //magic number
+var hoverDelay = 400; //magic number
 
-InstanceCarousel.prototype.init = function($elementOrUndefined) {
-    /**
-    * Flag to indicate whether the module has been enabled
-    *
-    * @property isEnabled
-    * @type {Boolean}
-    * @default false
-    */
-    this.isEnabled = false;
-    /**
-     * Root element of the Carousel Element
-     *
-     * @property $element
-     * @type {jQuery}
-     */
-    this.$element = $elementOrUndefined || null;
-
-    /**
-    * Current slide index of carousel
-    *
-    * @property currentSlideIndex
-    * @type {Number}
-    * @default 0
-    */
-    this.currentSlideIndex = 0;
-
-    /**
-    * Carousel container element
-    *
-    * @property $carouselContainer
-    * @type {jQuery} element
-    * @default '.js-carouselContainer'
-    */
-    this.$carouselContainer = $('.js-carouselContainer');
-
-    /**
-    * Total slides in Carousel
-    *
-    * @property totalSlideCount
-    * @type {Number}
-    * @default null
-    */
-    this.totalSlideCount = null;
-    /**
-    * Delay time (in miliseconds) between slide changes
-    *
-    * @property slideIntervalDelay
-    * @type {Number}
-    * @default 5000
-    */
-    this.slideIntervalDelay = 5000;
-
-    /**
-    * Delay time (in miliseconds) before carousel restarts animation
-    * after user exits carouselSlide or carouselThumbItem
-    *
-    * @property hoverDelay
-    * @type {Number}
-    * @default 400
-    */
-    this.hoverDelay = 400;
-
-    /**
-    * CSS class name for active carousel thumbnail
-    *
-    * @property activeThumbnail
-    * @type {String}
-    * @default 'carouselItemThumb_isActive'
-    */
-    this.isActiveThumb = 'carouselItemThumb_isActive';
-
-    /**
-    * CSS class name for visually hidden elements
-    * used to hide elements without using .hide()
-    *
-    * @property isVisuallyHidden
-    * @type {String}
-    * @default 'isVisuallyHidden'
-    */
-    this.isVisuallyHidden = 'isVisuallyHidden';
-
-    /**
-    * Aria-hidden string attribute
-    *
-    * @property ariaHidden
-    * @type {String}
-    * @default 'aria-hidden'
-    */
-    this.ariaHidden = 'aria-hidden';
-
-    /**
-     *
-     *
-     * @property
-     * @type
-     * @default
-     */
-     this.$carousel = this.$element;
-
-    return this.setupHandlers()
-                    .createChildren()
-                    .setupLayout()
-                    .render()
-                    .redraw();
-
-};
-
-InstanceCarousel.prototype.setupHandlers = function() {};
-InstanceCarousel.prototype.createChildren = function() {};
-InstanceCarousel.prototype.setupLayout = function() {};
-InstanceCarousel.prototype.render = function() {};
-InstanceCarousel.prototype.redraw = function() {};
-InstanceCarousel.prototype.onSlideHover = function () {};
-InstanceCarousel.prototype.onThumbnailHover = function () {};
+var ariaHidden = 'aria-hidden';
+var activeThumb = 'active-thumb'; // carousel-thumb_sActive
 
 
-/* -------------------------------------------------------------------------
-CarouselsController
-Author: Nate Geslin
-------------------------------------------------------------------------- */
-var CarouselsController = function() {};
+function nextSlide() {
+    // remove active class from previous slide thumb
+    // then hide previous slide
 
 
+    // show current slide
+    // add active class to current slide thumb
+}
+
+function updatePos() {
+
+
+    nextSlide();
+}
+
+function runCarousel() {
+    updatePos();
+    carouselTimer = setInterval( function() {
+        updatePos();
+    }, carouselDelay);
+}
+
+function stopCarousel() {
+    if (carouselTimer !== 0 ) {
+        clearInterval(carouselTimer);
+        carouselTimer = 0;
+    }
+}
+
+/* ---
+*   jQuery start
+--- */
+
+$(function() {
+    if (!$carouselContainer) {
+        return;
+    } else if ($carouselContainer === 0) {
+        return;
+    } else if ($carouselContainer.length > 0) {
+        runCarousel();
+
+        //main img hover
+        $carouselSlides.hover(function(){
+            stopCarousel();
+        }, function() {
+            setTimeout( function() { runCarousel(); }, 1000);
+        });
+
+        //thumbnail hover
+        $('.carousel-item-thumb li').hover(function(){
+            //chg main img to thumbnail img
+            //remove active class from original link
+            var hi = $(this).attr('id');
+            var hii = hi.slice(-1);
+            var beforeHoverSlideIndex = '#carousel-item-';
+            hoverSlide = beforeHoverSlideIndex + hii;
+            hoverThumb = '#' + hi;
+
+            //console.log(hi + ' ' + hii);
+            //stop animation after short delay
+            stopCarousel();
+
+            $(currentThumb).delay(hoverDelay).removeClass(activeThumb);
+            $(current).delay(hoverDelay).attr(ariaHidden, 'true').hide();
+            $(hoverSlide).delay(hoverDelay).attr(ariaHidden, 'false').show();
+
+        }, function() {
+            //hide hover img
+            $(hoverSlide).attr(ariaHidden, 'true').delay(hoverDelay).hide();
+
+            //fade in original main
+            //add active class back to original thumb
+            $(currentThumb).delay(hoverDelay).addClass(activeThumb);
+            $(current).delay(hoverDelay).attr(ariaHidden, 'false').show();
+
+            //restart carousel
+            runCarousel();
+        });
+    }
+});
