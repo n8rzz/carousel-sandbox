@@ -1,108 +1,94 @@
 // application.js
 'use strict';
 
-/*
-init
-setupHandlers
-createChildren
-layout
-enable/disable
-destroy
-render
-redraw
-*/
-var $carouselContainer = $('.js-carouselContainer');
-var $carouselSlides = $('.js-carouselSlide');
 
-var $startSlide = null;
-var $startSlideThumb = null;
+var IS_ENABLED = false;
 
-var slideLimit = null;
-var carouselTimer = 0;
-var carouselDelay = 5000; //magic number
-var hoverDelay = 400; //magic number
+var InstanceCarousel = function() {
+    this.init();
+};
+    InstanceCarousel.prototype.init = function() {
+        this.$carouselContainer = $('.js-carouselContainer');
+        this.$carouselSlides = $('.js-carouselSlide');
+        this.$carouselThumbnails = $('.js-carouselThumbItem');
+        this.$startSlide = null;
+        this.$startSlideThumb = null;
 
-var ariaHidden = 'aria-hidden';
-var activeThumb = 'active-thumb'; // carousel-thumb_sActive
+        this.slideLimit = null;
+        this.carouselTimer = 0;
+        this.carouselDelay = 5000; //magic number
+        this.hoverDelay = 400; //magic number
+        this.ariaHidden = 'aria-hidden';
+        this.activeThumb = 'active-thumb'; // carousel-thumb_sActive
+    };
 
+    InstanceCarousel.prototype.setupLayout = function() {
+        // isVisuallyHidden applied to all but $('.js-carouselSlide').first()
+    };
 
-function nextSlide() {
-    // remove active class from previous slide thumb
-    // then hide previous slide
+   InstanceCarousel.prototype.nextSlide = function() {
+        // remove active class from previous slide thumb
+        // then hide previous slide
 
+        console.log('next slide');
+        // show current slide
+        // add active class to current slide thumb
+    };
 
-    // show current slide
-    // add active class to current slide thumb
-}
+    InstanceCarousel.prototype.updatePos = function() {
+        if (IS_ENABLED) {
+            InstanceCarousel.nextSlide();
+        }
+    };
 
-function updatePos() {
+    InstanceCarousel.prototype.runCarousel = function() {
+        if (IS_ENABLED) {
+            InstanceCarousel.updatePos();
+        } else if (IS_ENABLED === false) {
+            InstanceCarousel.carouselTimer = setInterval( function() {
+                InstanceCarousel.updatePos();
+            }, InstanceCarousel.carouselDelay);
+        }
+    };
 
-
-    nextSlide();
-}
-
-function runCarousel() {
-    updatePos();
-    carouselTimer = setInterval( function() {
-        updatePos();
-    }, carouselDelay);
-}
-
-function stopCarousel() {
-    if (carouselTimer !== 0 ) {
-        clearInterval(carouselTimer);
-        carouselTimer = 0;
-    }
-}
+    InstanceCarousel.prototype.stopCarousel = function() {
+        if (InstanceCarousel.carouselTimer !== 0 ) {
+            clearInterval(InstanceCarousel.carouselTimer);
+            InstanceCarousel.carouselTimer = 0;
+        }
+    };
 
 /* ---
 *   jQuery start
 --- */
-
 $(function() {
-    if (!$carouselContainer) {
-        return;
-    } else if ($carouselContainer === 0) {
-        return;
-    } else if ($carouselContainer.length > 0) {
-        runCarousel();
+    // InstanceCarousel.init();
 
-        //main img hover
-        $carouselSlides.hover(function(){
-            stopCarousel();
-        }, function() {
-            setTimeout( function() { runCarousel(); }, 1000);
-        });
+    //main img hover
+    $('.js-carouselContainer').hover(function(){
+        //InstanceCarousel.stopCarousel();
+        console.log('mouseenter');
+    }, function() {
+        //   InstanceCarousel.runCarousel();
+        console.log('mouseexit');
+    });
 
-        //thumbnail hover
-        $('.carousel-item-thumb li').hover(function(){
-            //chg main img to thumbnail img
-            //remove active class from original link
-            var hi = $(this).attr('id');
-            var hii = hi.slice(-1);
-            var beforeHoverSlideIndex = '#carousel-item-';
-            hoverSlide = beforeHoverSlideIndex + hii;
-            hoverThumb = '#' + hi;
+    //thumbnail hover
+    $('.js-carouselThumbContainer').hover(function() { // mouseenter
+        //stop animation
+        //chg main img to thumbnail img
+        //remove active class from original link
 
-            //console.log(hi + ' ' + hii);
-            //stop animation after short delay
-            stopCarousel();
+        //InstanceCarousel.stopCarousel();
+        console.log('thumb container mouseenter');
+    }, function() { // mouseexit
+        // hide hover slide img
+        // fade in original main slide
+        // add active class back to original thumbnail
+        //restart carousel
 
-            $(currentThumb).delay(hoverDelay).removeClass(activeThumb);
-            $(current).delay(hoverDelay).attr(ariaHidden, 'true').hide();
-            $(hoverSlide).delay(hoverDelay).attr(ariaHidden, 'false').show();
+        //InstanceCarousel.runCarousel();
+        console.log('thumb container mouseexit');
+    });
 
-        }, function() {
-            //hide hover img
-            $(hoverSlide).attr(ariaHidden, 'true').delay(hoverDelay).hide();
-
-            //fade in original main
-            //add active class back to original thumb
-            $(currentThumb).delay(hoverDelay).addClass(activeThumb);
-            $(current).delay(hoverDelay).attr(ariaHidden, 'false').show();
-
-            //restart carousel
-            runCarousel();
-        });
-    }
 });
