@@ -1,11 +1,12 @@
 /* === carousel.scss === */
 
-#carouselContainer {
+.carouselContainer {
     height: 430px;
     width: 666px;
     position: relative;
     display: block;
     overflow: hidden;
+    border: 1px solid red;
 }
 
 .carouselSlideContainer {

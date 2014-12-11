@@ -1,0 +1,48 @@
+init
+- load vars
+
+setupHandlers
+- define hover actions
+
+createChildren
+- cache selectors
+
+setupContentStyles
+
+layout
+- hide hidden slides
+
+enable
+- startTimer
+
+
+|| render
+- prepare for redraw
+
+|| redraw
+
+|| gotoNextSlide
+
+
+\*\ disable
+- stopTimer
+
+|*| onSlideHover
+- previousSlideIndex
+
+|*| onThumbnailHover
+- previousSlideIndex
+
+
+------
+
+/*
+init
+setupHandlers
+createChildren
+layout
+enable/disable
+destroy
+render
+redraw
+*/

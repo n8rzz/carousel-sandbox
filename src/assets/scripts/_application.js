@@ -1,4 +1,14 @@
 // application.js
+/*
+init
+setupHandlers
+createChildren
+layout
+enable/disable
+destroy
+render
+redraw
+*/
 var $carouselContainer = $('#js-carousel-container');
 var $carouselItem = $('.carousel-item');
 var $startSlide = '#carousel-item-1'; // $('#carousel-item-1')  // $carouselContainer.first();
