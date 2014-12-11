@@ -1,94 +1,116 @@
 // application.js
 'use strict';
 
+// Namespace Object
+var NERD = NERD || {};
 
-var IS_ENABLED = false;
+// Pass reference to jQuery and Namespace
+(function($, APP) {
 
-var InstanceCarousel = function() {
-    this.init();
-};
-    InstanceCarousel.prototype.init = function() {
-        this.$carouselContainer = $('.js-carouselContainer');
-        this.$carouselSlides = $('.js-carouselSlide');
-        this.$carouselThumbnails = $('.js-carouselThumbItem');
-        this.$startSlide = null;
-        this.$startSlideThumb = null;
-
-        this.slideLimit = null;
-        this.carouselTimer = 0;
-        this.carouselDelay = 5000; //magic number
-        this.hoverDelay = 400; //magic number
-        this.ariaHidden = 'aria-hidden';
-        this.activeThumb = 'active-thumb'; // carousel-thumb_sActive
-    };
-
-    InstanceCarousel.prototype.setupLayout = function() {
-        // isVisuallyHidden applied to all but $('.js-carouselSlide').first()
-    };
-
-   InstanceCarousel.prototype.nextSlide = function() {
-        // remove active class from previous slide thumb
-        // then hide previous slide
-
-        console.log('next slide');
-        // show current slide
-        // add active class to current slide thumb
-    };
-
-    InstanceCarousel.prototype.updatePos = function() {
-        if (IS_ENABLED) {
-            InstanceCarousel.nextSlide();
-        }
-    };
-
-    InstanceCarousel.prototype.runCarousel = function() {
-        if (IS_ENABLED) {
-            InstanceCarousel.updatePos();
-        } else if (IS_ENABLED === false) {
-            InstanceCarousel.carouselTimer = setInterval( function() {
-                InstanceCarousel.updatePos();
-            }, InstanceCarousel.carouselDelay);
-        }
-    };
-
-    InstanceCarousel.prototype.stopCarousel = function() {
-        if (InstanceCarousel.carouselTimer !== 0 ) {
-            clearInterval(InstanceCarousel.carouselTimer);
-            InstanceCarousel.carouselTimer = 0;
-        }
-    };
-
-/* ---
-*   jQuery start
---- */
-$(function() {
-    // InstanceCarousel.init();
-
-    //main img hover
-    $('.js-carouselContainer').hover(function(){
-        //InstanceCarousel.stopCarousel();
-        console.log('mouseenter');
-    }, function() {
-        //   InstanceCarousel.runCarousel();
-        console.log('mouseexit');
+    // DOM Ready Function
+    $(function() {
+        APP.InstanceCarousel.init();
+        APP.CarouselsController.init();
     });
 
-    //thumbnail hover
-    $('.js-carouselThumbContainer').hover(function() { // mouseenter
-        //stop animation
-        //chg main img to thumbnail img
-        //remove active class from original link
 
-        //InstanceCarousel.stopCarousel();
-        console.log('thumb container mouseenter');
-    }, function() { // mouseexit
-        // hide hover slide img
-        // fade in original main slide
-        // add active class back to original thumbnail
-        //restart carousel
+    APP.InstanceCarousel = {
+        $carousel: null,
+        init: function() {
+            var $carousels = $('.js-carouselContainer');
 
-        //InstanceCarousel.runCarousel();
-        console.log('thumb container mouseexit');
-    });
+            if ($carousels.length === 0) {
+                return;
+            }
 
-});
+            this.$carousels = $carousels;
+            this.isEnabled = false;
+
+            this.createChildren();
+            this.setupContentStyles();
+            this.setupHandlers();
+            this.setupLayout();
+            this.render();
+            this.redraw();
+
+            console.log('instance initalized');
+        },
+        createChildren: function() {
+            this.$carouselSlides = this.$carousels.find('.js-carouselSlide');
+            this.$carouselThumbnails = this.$carousels.find('.js-carouselThumbItem');
+            this.slideLimit = this.$carouselThumbnails.length;
+            this.carouselTimer = 0;
+            this.carouselDelay = 5000; //magic number
+            this.hoverDelay = 400; //magic number
+            this.isVisuallyHidden = 'isVisuallyHidden';
+            this.ariaHidden = 'aria-hidden';
+            this.activeThumb = 'active-thumb'; // carousel-thumb_isActive
+            this.startSlide = null;
+            this.startSlideThumb = null;
+
+            console.log('creating children ' + this.slideLimit);
+
+            return this;
+        },
+        setupContentStyles: function() {
+            this.$carouselSlides.slice(1).hide();
+
+            console.log('setting up content styles, hiding other slides');
+        },
+        setupHandlers: function() {
+            console.log('setting up handlers');
+
+            // carouselContainer hover
+            // carouselSlide hover
+            // carouselThumbnail hover
+
+            return this;
+        },
+        setupLayout: function() {
+            console.log('setting up layout');
+
+            return this;
+        },
+        render: function() {
+            console.log('rendering...');
+
+            return this;
+        },
+        redraw: function() {
+            console.log('redrawing...');
+
+            return this;
+        },
+        gotoNextSlide: function() {
+            console.log('going to next slide');
+
+            // $('.js-carouselThumbItem').eq(1).addClass('carouselThumbItem_isActive');
+
+            return this.redraw();
+        },
+        onSlideHover: function() {
+            console.log('slide hover');
+        },
+        onThumbnailHover: function () {
+            console.log('thumbnail hover');
+        }
+
+    };
+
+
+    APP.CarouselsController = {
+        init: function() {
+            var $carousels = $('.js-carouselContainer');
+
+            if ($carousels.length === 0 || !$carousels) {
+                return;
+            }
+
+            console.log('controller init with a carousel');
+
+
+
+        }
+    }; //APP.CarouselController
+
+}(jQuery, NERD));
