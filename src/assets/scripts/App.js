@@ -179,11 +179,15 @@ Author: Nate Geslin
         InstanceCarousel.prototype.setupHandlers = function() {
             console.log('setting up handlers');
 
-            var slideHoverHandler = $.proxy(this.onSlideHover, this);
-            this.$carousel.on('mouseenter', this.$carouselSlides, slideHoverHandler);
+            this.onSlideHoverHandler = $.proxy(this.onSlideHover, this);
+            this.offSlideHoverHandler = $.proxy(this.offSlideHover, this);
 
-            var thumbnailHoverHandler = $.proxy(this.onThumbnailHover, this);
-            this.$carouselThumbnails.on('mouseenter', this.$carouselThumbItem, thumbnailHoverHandler);
+            this.$carousel.on('mouseenter', this.$carouselSlides, this.onSlideHoverHandler);
+            this.$carousel.on('mouseexit', this.$carouselSlides, this.offSlideHoverHandler);
+
+
+            this.thumbnailHoverHandler = $.proxy(this.onThumbnailHover, this);
+            this.$carouselThumbnails.on('mouseenter', this.$carouselThumbItem, this.thumbnailHoverHandler);
 
             return this;
         };
@@ -248,7 +252,8 @@ Author: Nate Geslin
                 this.isEnabled = true;
 
                 console.log('enabling...');
-                return this.startTimer();
+                return this;
+                //.startTimer();
             }
 
             return this;
@@ -282,15 +287,22 @@ Author: Nate Geslin
             }
         };
 
-        InstanceCarousel.prototype.onSlideHover = function() {
-            console.log('slide hover');
+        InstanceCarousel.prototype.onSlideHover = function(event) {
+            var target = event.type;
+            console.log('slide hover ' + target);
+
             // slide.mouseenter
             return this.disable()
                            .stopTimer();
+        };
 
-
+        InstanceCarousel.prototype.offSlideHover = function (event) {
+            var target = event.type;
+            console.log('slide hover ' + target);
             // slide.mouseexit
             // isEnabled = true;
+            return this.enable()
+                           .startTimer();
         };
 
         InstanceCarousel.prototype.onThumbnailHover = function () {
