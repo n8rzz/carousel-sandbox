@@ -166,6 +166,10 @@ Author: Nate Geslin
 
             this.$carouselSlides = this.$carousel.find('.js-carouselSlide');
             this.$carouselThumbnails = this.$carousel.find('.js-carouselThumbItem');
+            this.$currentSlide = null;
+            this.$currentThumbnail = null;
+            this.$previousSlide = null;
+            this.$previousThumbnail = null;
 
             console.log('initializing...');
 
@@ -192,10 +196,9 @@ Author: Nate Geslin
 
         InstanceCarousel.prototype.createChildren = function() {
             this.slideLimit = this.$carouselSlides.length;
-            this.$startSlide = this.$carouselSlides.first();
-            this.$startThumbnail = this.$carouselThumbnails.first();
-            this.currentSlideIndex = this.$startSlide.index();
-
+            this.$currentSlide = this.$carouselSlides.first();
+            this.$currentThumbnail = this.$carouselThumbnails.first();
+            this.currentSlideIndex = this.$currentSlide.index();
 
             console.log('creating children ');
             console.log( 'limit '+ this.$slideLimit + ' index ' + this.currentSlideIndex);
@@ -214,24 +217,27 @@ Author: Nate Geslin
         InstanceCarousel.prototype.render = function() {
             console.log('rendering...');
 
-            //previous $('.js-carouselSlide').eq(3).removeClass('isVisuallyHidden');
-            //next $('.js-carouselThumbItem').eq(3).addClass('carouselThumbItem_isActive');
+            this.$previousSlide = this.$currentSlide;
+            this.$previousThumbnail = this.$currentThumbnail;
+
+            this.$currentSlide = this.$carouselSlides.eq(this.currentSlideIndex);
+            this.$currentThumbnail = this.$carouselThumbnails.eq(this.currentSlideIndex);
 
             return this.redraw();
         };
 
         InstanceCarousel.prototype.redraw = function() {
-            console.log('redrawing...');
-
             if (!this.isEnabled) {
+                console.log('not going to redraw, disabled');
                 return this;
             }
 
-            // $('.js-carouselSlide').eq(3).addClass('isVisuallyHidden').fadeIn();
-            // $('.js-carouselThumbItem').eq(3).removeClass('carouselThumbItem_isActive');
+            console.log('redrawing...' );
+            this.$previousSlide.addClass('isVisuallyHidden');
+            this.$previousThumbnail.removeClass('carouselThumbItem_isActive');
 
-            // change current slide to next slide
-            // if ( hover ) { store previous slide index, change to hovered thumb }
+            this.$currentSlide.removeClass('isVisuallyHidden');
+            this.$currentThumbnail.addClass('carouselThumbItem_isActive');
 
             return this;
         };
