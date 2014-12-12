@@ -7,10 +7,10 @@ setupHandlers
 createChildren
 - cache selectors
 
-setupContentStyles
-
 layout
 - hide hidden slides
+
+###
 
 enable
 - startTimer
