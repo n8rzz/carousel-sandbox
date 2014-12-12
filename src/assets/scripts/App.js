@@ -135,7 +135,7 @@ Author: Nate Geslin
             * @type {Number}
             * @default 5000
             */
-            this.carouselDelay = 5000; //magic number
+            this.carouselDelay = 2000; //magic number
 
             /**
             * Selector for first slide image
@@ -144,7 +144,7 @@ Author: Nate Geslin
             * @type {jQuery}
             * @default null
             */
-            this.startSlide = null;
+            this.$startSlide = null;
 
             /**
             * Selector for first thumbnail
@@ -153,16 +153,16 @@ Author: Nate Geslin
             * @type {jQuery}
             * @default null
             */
-            this.startThumbnail = null;
+            this.$startThumbnail = null;
 
             /**
             * Active thumbnail CSS class
             *
-            * @property activeThumb
+            * @property activeThumbnailClass
             * @type {String}
             * @default carousel-thumb_isActive
             */
-            this.activeThumb = 'carousel-thumb_isActive';
+            this.activeThumbnailClass = 'carousel-thumb_isActive';
 
             this.$carouselSlides = this.$carousel.find('.js-carouselSlide');
             this.$carouselThumbnails = this.$carousel.find('.js-carouselThumbItem');
@@ -180,11 +180,8 @@ Author: Nate Geslin
             console.log('setting up handlers');
 
             this.onSlideHoverHandler = $.proxy(this.onSlideHover, this);
-            this.offSlideHoverHandler = $.proxy(this.offSlideHover, this);
-
             this.$carousel.on('mouseenter', this.$carouselSlides, this.onSlideHoverHandler);
-            this.$carousel.on('mouseexit', this.$carouselSlides, this.offSlideHoverHandler);
-
+            this.$carousel.on('mouseleave', this.$carouselSlides, this.onSlideHoverHandler);
 
             this.thumbnailHoverHandler = $.proxy(this.onThumbnailHover, this);
             this.$carouselThumbnails.on('mouseenter', this.$carouselThumbItem, this.thumbnailHoverHandler);
@@ -193,12 +190,12 @@ Author: Nate Geslin
         };
 
         InstanceCarousel.prototype.createChildren = function() {
-            this.$slideLimit = this.$carouselThumbnails.length;
-            this.currentSlideIndex = this.$carouselSlides.first().index();
-            this.startSlide = this.$carouselSlides.eq(this.$currentSlideIndex);
-            this.startThumbnail = this.$carouselThumbnails.eq(this.$currentSlideIndex);
+            this.$slideLimit = this.$carouselSlides.length;
+            // this.$startSlide = this.$carouselSlides.eq(this.$currentSlideIndex);
+            // this.$startThumbnail = this.$carouselThumbnails.eq(this.$currentSlideIndex);
 
             console.log('creating children ');
+            console.log( 'limit '+ this.$slideLimit + ' index ' + this.currentSlideIndex);
 
             return this;
         };
@@ -223,7 +220,7 @@ Author: Nate Geslin
         InstanceCarousel.prototype.redraw = function() {
             console.log('redrawing...');
 
-            // if enabled contine
+            // if enabled continue
 
             // $('.js-carouselSlide').eq(3).addClass('isVisuallyHidden').fadeIn();
             // $('.js-carouselThumbItem').eq(3).removeClass('carouselThumbItem_isActive');
@@ -235,14 +232,15 @@ Author: Nate Geslin
         };
 
         InstanceCarousel.prototype.gotoNextSlide = function () {
-            console.log('going to next slide');
-
-             this.currentSlideIndex++;
+            this.currentSlideIndex++;
 
             if (this.currentSlideIndex > this.currentSlideIndex.length) {
                 this.currentSlideIndex = 0;
+                console.log('going back to first slide...');
             }
-            //this.$carouselThumbnails.eq(this.currentSlideIndex).addClass('carouselThumbItem_isActive');
+            console.log('going to next slide...' + this.currentSlideIndex);
+            // this.$carouselSlides.index(this.currentSlideIndex);
+            // this.$carouselThumbnails.index(this.currentSlideIndex).addClass('carouselThumbItem_isActive');
 
             return this;
         };
@@ -252,8 +250,7 @@ Author: Nate Geslin
                 this.isEnabled = true;
 
                 console.log('enabling...');
-                return this;
-                //.startTimer();
+                return this.startTimer();
             }
 
             return this;
@@ -272,7 +269,7 @@ Author: Nate Geslin
 
         InstanceCarousel.prototype.startTimer = function () {
             if (this.isEnabled) {
-                this.carouselTimer = setInterval(this.gotoNextSlide(), this.carouselDelay);
+                this.carouselTimer = setInterval(this.gotoNextSlide, this.carouselDelay);
                 // this.isEnabled = true;
             }
         };
@@ -292,23 +289,24 @@ Author: Nate Geslin
             console.log('slide hover ' + target);
 
             // slide.mouseenter
-            return this.disable()
-                           .stopTimer();
-        };
+            // return this.disable().stopTimer();
 
-        InstanceCarousel.prototype.offSlideHover = function (event) {
-            var target = event.type;
-            console.log('slide hover ' + target);
+            /*
             // slide.mouseexit
+            console.log('slide hover ' + target);
             // isEnabled = true;
+
             return this.enable()
                            .startTimer();
+            */
         };
 
         InstanceCarousel.prototype.onThumbnailHover = function () {
             console.log('thumbnail hover');
+
             // slide.mouseenter
-            // isEnabled = false;
+            return this.disable()
+                           .stopTimer();
 
             // slide.mouseexit
             // isEnabled = true;
@@ -328,9 +326,6 @@ Author: Nate Geslin
             if ($carousels.length === 0) {
                 return;
             }
-
-//// instance.init?        var $carouselSlides = $('.js-carouselSlide');
-//// instance.init?        var $carouselThumbnails = $('.js-carouselThumbItem');
 
             $carousels.each(function() {
                 var $this = $(this);
