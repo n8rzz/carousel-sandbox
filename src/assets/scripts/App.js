@@ -135,7 +135,7 @@ Author: Nate Geslin
             * @type {Number}
             * @default 5000
             */
-            this.carouselDelay = 8000; //magic number
+            this.carouselDelay = 2000; //magic number
 
             /**
             * Active thumbnail CSS class
@@ -200,15 +200,12 @@ Author: Nate Geslin
             */
             this.$previousThumbnail = null;
 
-            // this.$carouselThumbnailContainer = this.$carousel.find('js-carouselThumbContainer');
-
             console.log('initializing...');
 
             return this.setupHandlers()
                             .createChildren()
                             .layout()
                             .enable();
-
         };
 
         /**
@@ -287,17 +284,12 @@ Author: Nate Geslin
 
         /**
          * Redraws the view by removing CSS classes to previous slide/thumbnail and adding new ones to the next visible slide/thumbnail
-         * Fails if isEnabled === false
+         *
          *
          * @method redraw
          * @chainable
          */
         InstanceCarousel.prototype.redraw = function() {
-            if (!this.isEnabled) {
-                console.log('not going to redraw, disabled');
-                return this;
-            }
-
             console.log('redrawing...' );
             this.$previousSlide.addClass('isVisuallyHidden');
             this.$previousThumbnail.find('a').removeClass('carouselThumbItem_isActive');
@@ -435,26 +427,21 @@ Author: Nate Geslin
             var $item = $(event.currentTarget);
             var hoverEvent = event.type;
 
-            this.currentSlideIndex = this.previousSlideIndex;
+            this.previousSlideIndex = this.currentSlideIndex;
 
             switch  (hoverEvent) {
                 case 'mouseenter':
                     console.log('-----');
-                    // console.log(this, 'thumbnail ' + hoverEvent, $item, event);
-                    console.log('item ', $item);
+                    this.currentSlideIndex = $item.index();
                     console.log('thumbnail ' + hoverEvent, $item.index());
-                    console.log(this, event);
-                    // hover target[index] becomes new slide
-                    // return this.render();
-                    break;
+                    return this.render();
+
                     // return this.disable()
                 case 'mouseleave':
+                    this.$currentSlideIndex = this.$previousSlideIndex;
                     console.log('thumbnail ' + hoverEvent);
-                    console.log('item ', $item);
                     console.log('-----');
-                    // previous becomes current
-                    // return this.render()
-                    break;
+                    return this.render();
                 default:
                     break;
             }
