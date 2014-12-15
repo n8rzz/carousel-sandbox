@@ -79,7 +79,7 @@ Author: Nate Geslin
             * @type {Number}
             * @default 5000
             */
-            this.slideIntervalDelay = 5000;
+            this.slideIntervalDelay = 2000;
 
             /**
             * Delay time (in miliseconds) before carousel restarts animation
@@ -135,25 +135,7 @@ Author: Nate Geslin
             * @type {Number}
             * @default 5000
             */
-            this.carouselDelay = 2000; //magic number
-
-            /**
-            * Selector for first slide image
-            *
-            * @property startSlide
-            * @type {jQuery}
-            * @default null
-            */
-            this.$startSlide = null;
-
-            /**
-            * Selector for first thumbnail
-            *
-            * @property startThumbnail
-            * @type {jQuery}
-            * @default null
-            */
-            this.$startThumbnail = null;
+            this.carouselDelay = 5000; //magic number
 
             /**
             * Active thumbnail CSS class
@@ -201,7 +183,7 @@ Author: Nate Geslin
             this.currentSlideIndex = this.$currentSlide.index();
 
             console.log('creating children ');
-            console.log( 'limit '+ this.$slideLimit + ' index ' + this.currentSlideIndex);
+            console.log( 'limit '+ this.slideLimit + ' index ' + this.currentSlideIndex);
 
             return this;
         };
@@ -246,7 +228,7 @@ Author: Nate Geslin
             this.previousSlideIndex = this.currentSlideIndex;
             this.currentSlideIndex++;
 
-            if (this.currentSlideIndex > this.slideLimit) {
+            if (this.currentSlideIndex >= this.slideLimit) {
                 this.currentSlideIndex = 0;
                 console.log('going back to first slide...');
             }
@@ -308,21 +290,25 @@ Author: Nate Geslin
                 }
         };
 
-        // on thumbnail enter (thumbnail container!)
+        // on thumbnail enter
         InstanceCarousel.prototype.onThumbnailHover = function (event) {
             var target = event.type;
 
             switch  (target) {
                 case 'mouseenter':
                     console.log('thumbnail hover ' + target);
+                    // hover target[index] becomes new slide
+                    // return this.render();
                     break;
                     // return this.disable()
                 case 'mouseleave':
                     console.log('thumbnail hover ' + target);
+                    // previous becomes current
+                    // return this.render()
                     break;
                 default:
                     break;
-                }
+            }
         };
 
         return InstanceCarousel;
