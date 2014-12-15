@@ -432,15 +432,16 @@ Author: Nate Geslin
          * @param {jQueryEvent} event Hover event
          */
         InstanceCarousel.prototype.onThumbnailHover = function (event) {
-            var $item = $(event.target);
-            console.log($item);
+            var $item = $(event.currentTarget);
             var hoverEvent = event.type;
 
             this.currentSlideIndex = this.previousSlideIndex;
 
             switch  (hoverEvent) {
                 case 'mouseenter':
+                    console.log('-----');
                     // console.log(this, 'thumbnail ' + hoverEvent, $item, event);
+                    console.log('item ', $item);
                     console.log('thumbnail ' + hoverEvent, $item.index());
                     console.log(this, event);
                     // hover target[index] becomes new slide
@@ -448,7 +449,9 @@ Author: Nate Geslin
                     break;
                     // return this.disable()
                 case 'mouseleave':
-                    console.log('thumbnail ' + hoverEvent, $item.index());
+                    console.log('thumbnail ' + hoverEvent);
+                    console.log('item ', $item);
+                    console.log('-----');
                     // previous becomes current
                     // return this.render()
                     break;
