@@ -290,19 +290,19 @@ Author: Nate Geslin
                 }
         };
 
-        // on thumbnail enter
+        // on thumbnail mouseenter
         InstanceCarousel.prototype.onThumbnailHover = function (event) {
             var target = event.type;
 
             switch  (target) {
                 case 'mouseenter':
-                    console.log('thumbnail hover ' + target);
+                    console.log(this, 'thumbnail ' + target + ', index ' );
                     // hover target[index] becomes new slide
                     // return this.render();
                     break;
                     // return this.disable()
                 case 'mouseleave':
-                    console.log('thumbnail hover ' + target);
+                    console.log('thumbnail ' + target);
                     // previous becomes current
                     // return this.render()
                     break;
