@@ -70,7 +70,7 @@ Author: Nate Geslin
             * @type {Number}
             * @default null
             */
-            this.$slideLimit = null;
+            this.slideLimit = null;
 
             /**
             * Delay time (in miliseconds) between slide changes
@@ -135,7 +135,7 @@ Author: Nate Geslin
             * @type {Number}
             * @default 5000
             */
-            this.carouselDelay = 5000; //magic number
+            this.carouselDelay = 8000; //magic number
 
             /**
             * Active thumbnail CSS class
@@ -200,6 +200,8 @@ Author: Nate Geslin
             */
             this.$previousThumbnail = null;
 
+            this.$carouselThumbnailContainer = this.$carousel.find('js-carouselThumbContainer');
+
             console.log('initializing...');
 
             return this.setupHandlers()
@@ -224,7 +226,7 @@ Author: Nate Geslin
             this.$carousel.on('mouseleave', this.$carouselSlides, this.onSlideHoverHandler);
 
             this.thumbnailHoverHandler = $.proxy(this.onThumbnailHover, this);
-            this.$carouselThumbnails.on('mouseenter', this.$carouselThumbItem, this.thumbnailHoverHandler);
+            this.$carouselThumbnails.on('mouseenter', this.$carouselThumbnailContainer, this.thumbnailHoverHandler);
             this.$carouselThumbnails.on('mouseleave', this.$carouselThumbItem, this.thumbnailHoverHandler);
 
             return this;
@@ -298,10 +300,10 @@ Author: Nate Geslin
 
             console.log('redrawing...' );
             this.$previousSlide.addClass('isVisuallyHidden');
-            this.$previousThumbnail.removeClass('carouselThumbItem_isActive');
+            this.$previousThumbnail.find('a').removeClass('carouselThumbItem_isActive');
 
             this.$currentSlide.removeClass('isVisuallyHidden');
-            this.$currentThumbnail.addClass('carouselThumbItem_isActive');
+            this.$currentThumbnail.find('a').addClass('carouselThumbItem_isActive');
 
             return this;
         };
@@ -406,14 +408,14 @@ Author: Nate Geslin
          * @param {jQueryEvent} event Hover event
          */
         InstanceCarousel.prototype.onSlideHover = function(event) {
-            var target = event.type;
+            var hoverEvent = event.type;
 
-            switch  (target) {
+            switch  (hoverEvent) {
                 case 'mouseenter':
-                    console.log('slide hover ' + target);
+                    console.log('slide hover ' + hoverEvent);
                     return this.disable();
                 case 'mouseleave':
-                    console.log('slide hover ' + target);
+                    console.log('slide hover ' + hoverEvent);
                     return this.enable();
                 default:
                     break;
@@ -431,17 +433,17 @@ Author: Nate Geslin
          */
         InstanceCarousel.prototype.onThumbnailHover = function (event) {
             this.currentSlideIndex = this.previousSlideIndex;
-            var target = event.type;
+            var hoverEvent = event.type;
 
-            switch  (target) {
+            switch  (hoverEvent) {
                 case 'mouseenter':
-                    console.log(this, 'thumbnail ' + target + ', index ' );
+                    console.log(this, 'thumbnail ' + hoverEvent, event);
                     // hover target[index] becomes new slide
                     // return this.render();
                     break;
                     // return this.disable()
                 case 'mouseleave':
-                    console.log('thumbnail ' + target);
+                    console.log('thumbnail ' + hoverEvent);
                     // previous becomes current
                     // return this.render()
                     break;
