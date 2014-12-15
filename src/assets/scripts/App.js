@@ -200,7 +200,7 @@ Author: Nate Geslin
             */
             this.$previousThumbnail = null;
 
-            this.$carouselThumbnailContainer = this.$carousel.find('js-carouselThumbContainer');
+            // this.$carouselThumbnailContainer = this.$carousel.find('js-carouselThumbContainer');
 
             console.log('initializing...');
 
@@ -226,8 +226,8 @@ Author: Nate Geslin
             this.$carousel.on('mouseleave', this.$carouselSlides, this.onSlideHoverHandler);
 
             this.thumbnailHoverHandler = $.proxy(this.onThumbnailHover, this);
-            this.$carouselThumbnails.on('mouseenter', this.$carouselThumbnailContainer, this.thumbnailHoverHandler);
-            this.$carouselThumbnails.on('mouseleave', this.$carouselThumbItem, this.thumbnailHoverHandler);
+            this.$carouselThumbnails.on('mouseenter', this.thumbnailHoverHandler);
+            this.$carouselThumbnails.on('mouseleave', this.thumbnailHoverHandler);
 
             return this;
         };
@@ -432,18 +432,23 @@ Author: Nate Geslin
          * @param {jQueryEvent} event Hover event
          */
         InstanceCarousel.prototype.onThumbnailHover = function (event) {
-            this.currentSlideIndex = this.previousSlideIndex;
+            var $item = $(event.target);
+            console.log($item);
             var hoverEvent = event.type;
+
+            this.currentSlideIndex = this.previousSlideIndex;
 
             switch  (hoverEvent) {
                 case 'mouseenter':
-                    console.log(this, 'thumbnail ' + hoverEvent, event);
+                    // console.log(this, 'thumbnail ' + hoverEvent, $item, event);
+                    console.log('thumbnail ' + hoverEvent, $item.index());
+                    console.log(this, event);
                     // hover target[index] becomes new slide
                     // return this.render();
                     break;
                     // return this.disable()
                 case 'mouseleave':
-                    console.log('thumbnail ' + hoverEvent);
+                    console.log('thumbnail ' + hoverEvent, $item.index());
                     // previous becomes current
                     // return this.render()
                     break;
