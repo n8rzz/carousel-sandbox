@@ -146,11 +146,58 @@ Author: Nate Geslin
             */
             this.activeThumbnailClass = 'carousel-thumb_isActive';
 
+            /**
+            * Array containing .js-carouselSlide elements
+            *
+            * @property $carouselSlides
+            * @type {jQuery}
+            * @default .js-carouselSlide
+            */
             this.$carouselSlides = this.$carousel.find('.js-carouselSlide');
+
+            /**
+            * Array containing .js-carouselThumbnail elements
+            *
+            * @property $carouselThumbnails
+            * @type {jQuery}
+            * @default .js-carouselThumbItem
+            */
             this.$carouselThumbnails = this.$carousel.find('.js-carouselThumbItem');
+
+            /**
+            * Current slide selector
+            *
+            * @property $currentSlide
+            * @type {jQuery}
+            * @default null
+            */
             this.$currentSlide = null;
+
+            /**
+            * Current thumbnail selector
+            *
+            * @property $currentThumbnail
+            * @type {jQuery}
+            * @default null
+            */
             this.$currentThumbnail = null;
+
+            /**
+            * Previous slide selector
+            *
+            * @property $previousSlide
+            * @type {jQuery}
+            * @default null
+            */
             this.$previousSlide = null;
+
+            /**
+            * Previous thumbnail selector
+            *
+            * @property $previousThumbnail
+            * @type {jQuery}
+            * @default null
+            */
             this.$previousThumbnail = null;
 
             console.log('initializing...');
@@ -162,6 +209,13 @@ Author: Nate Geslin
 
         };
 
+        /**
+         * Binds the scope of any handler functions
+         * Should only be run on initialization of the view
+         *
+         * @method setupHandlers
+         * @chainable
+         */
         InstanceCarousel.prototype.setupHandlers = function() {
             console.log('setting up handlers');
 
@@ -176,6 +230,13 @@ Author: Nate Geslin
             return this;
         };
 
+        /**
+         * Create any child objects or references to DOM elements
+         * Should only be run on initialization of the view
+         *
+         * @method createChildren
+         * @chainable
+         */
         InstanceCarousel.prototype.createChildren = function() {
             this.slideLimit = this.$carouselSlides.length;
             this.$currentSlide = this.$carouselSlides.first();
@@ -187,6 +248,7 @@ Author: Nate Geslin
 
             return this;
         };
+
 
         InstanceCarousel.prototype.layout = function() {
             console.log('setting up content styles, hiding other slides');
