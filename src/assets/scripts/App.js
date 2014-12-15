@@ -249,7 +249,13 @@ Author: Nate Geslin
             return this;
         };
 
-
+        /**
+         * Visually hide all but the first slide element
+         * Should only be run on initialization of the view
+         *
+         * @method layout
+         * @chainable
+         */
         InstanceCarousel.prototype.layout = function() {
             console.log('setting up content styles, hiding other slides');
 
@@ -258,6 +264,13 @@ Author: Nate Geslin
             return this;
         };
 
+        /**
+         * Prepares the view for redrawing
+         * Transfers selectors to new variables
+         *
+         * @method render
+         * @chainable
+         */
         InstanceCarousel.prototype.render = function() {
             console.log('rendering...');
 
@@ -270,6 +283,13 @@ Author: Nate Geslin
             return this.redraw();
         };
 
+        /**
+         * Redraws the view by removing CSS classes to previous slide/thumbnail and adding new ones to the next visible slide/thumbnail
+         * Fails if isEnabled === false
+         *
+         * @method redraw
+         * @chainable
+         */
         InstanceCarousel.prototype.redraw = function() {
             if (!this.isEnabled) {
                 console.log('not going to redraw, disabled');
@@ -286,6 +306,13 @@ Author: Nate Geslin
             return this;
         };
 
+        /**
+         * Updates iterator to the next slide index
+         * Returns to first if at the last slide
+         *
+         * @method gotoNextSlide
+         * @chainable
+         */
         InstanceCarousel.prototype.gotoNextSlide = function () {
             this.previousSlideIndex = this.currentSlideIndex;
             this.currentSlideIndex++;
@@ -300,7 +327,18 @@ Author: Nate Geslin
             return this.render();
         };
 
+        /**
+         * Enables the carousel
+         * Exits early if already disabled
+         *
+         * @method enable
+         * @chainable
+         */
         InstanceCarousel.prototype.enable = function () {
+            if (this.isEnabled) {
+                return this;
+            }
+
             if (!this.isEnabled) {
                 this.isEnabled = true;
 
@@ -310,7 +348,17 @@ Author: Nate Geslin
             return this;
         };
 
+        /**
+         * Disables the carousel
+         * Exits early if already disabled
+         *
+         * @method createChildren
+         * @chainable
+         */
         InstanceCarousel.prototype.disable = function () {
+            if (!this.isEnabled) {
+                return this;
+            }
             if (this.isEnabled) {
                 this.isEnabled = false;
 
@@ -320,12 +368,26 @@ Author: Nate Geslin
             return this;
         };
 
+        /**
+         * Initiates interval timer
+         *
+         *
+         * @method startTimer
+         * @chainable
+         */
         InstanceCarousel.prototype.startTimer = function () {
             if (this.isEnabled) {
                 this.carouselTimer = setInterval(this.gotoNextSlide.bind(this), this.carouselDelay);
             }
         };
 
+        /**
+         * Destroys interval timer
+         * Resets carouselTimer variable
+         *
+         * @method stopTimer
+         * @chainable
+         */
         InstanceCarousel.prototype.stopTimer = function () {
             if (this.carouselTimer !== 0) {
                 clearInterval(this.carouselTimer);
@@ -335,10 +397,16 @@ Author: Nate Geslin
             }
         };
 
-        // on container mouseenter
+        /**
+         * onSlideHover Handler method
+         * Listens for Hover events on the slide container
+         * Disables or Enables carouselTimer based on action
+         *
+         * @method onSlideHover
+         * @param {jQueryEvent} event Hover event
+         */
         InstanceCarousel.prototype.onSlideHover = function(event) {
             var target = event.type;
-            this.currentSlideIndex = this.previousSlideIndex;
 
             switch  (target) {
                 case 'mouseenter':
@@ -352,8 +420,17 @@ Author: Nate Geslin
                 }
         };
 
-        // on thumbnail mouseenter
+        /**
+         * onThumbnailHover Handler method
+         * Listens for Hover events on slide thumbnails
+         * Disables or Enables carouselTimer based on action
+         * Caches previousSlideIndex as currentSlideIndex for rendering after hover is finished
+         *
+         * @method onThumbnailHover
+         * @param {jQueryEvent} event Hover event
+         */
         InstanceCarousel.prototype.onThumbnailHover = function (event) {
+            this.currentSlideIndex = this.previousSlideIndex;
             var target = event.type;
 
             switch  (target) {
